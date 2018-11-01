@@ -10,6 +10,10 @@ import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'app',
+  created(){
+    const api = process.env.VUE_APP_API_BASE+':mooji/products'
+    this.$http.get(api).then(res=>console.log(res.data))
+  },
   components: {
     HelloWorld
   }
