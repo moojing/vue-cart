@@ -200,8 +200,7 @@ export default {
         updateProduct(){
              
             ajaxPostProducts({data:this.tempProduct}).then(res=>{
-                console.log('product',res.data);
-                 
+                // console.log('product',res.data);
             }) 
         },
         uploadFile(){
@@ -216,13 +215,14 @@ export default {
                         'Access-Control-Allow-Origin': '*'
                     },
                     
-                }).then(res=>{
+                }).then(()=>{
                      this.status.fileUploading = false
                 })
         } 
     },
     created() {
         this.getProducts()
+        this.$bus.$emit('message:push','一段訊息','success')
     },
 }
 </script>
