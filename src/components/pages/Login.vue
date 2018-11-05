@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import {ajaxAdminSignin} from '@/api/user'
 export default {
   data(){
     return {
@@ -28,9 +29,7 @@ export default {
   },
   methods:{
     signin(){
-      const api = process.env.VUE_APP_API_BASE 
-       
-        this.$http.post(`${api}/admin/signin`,this.user).then(res=>{
+        ajaxAdminSignin(this.user).then(res=>{
            if(res.data.success){
              this.$router.push('/admin/products')
            }
