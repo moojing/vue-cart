@@ -2,6 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import 'bootstrap'
+import 'jquery'
 
 import App from './App.vue'
 import router from './router'
@@ -19,6 +20,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     const api = `${process.env.VUE_APP_API_BASE}/api/user/check`
     axios.post(api).then(response => {
+      console.log('response', response.data)
       if (response.data.success) {
         next()
       } else {

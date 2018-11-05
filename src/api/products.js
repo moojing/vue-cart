@@ -7,3 +7,10 @@ export const ajaxGetProducts = () => {
     method: 'get'
   })
 }
+export const ajaxPostProducts = data => {
+  return ajax({
+    url: `/api/${customPath}/admin/product`,
+    method: 'post',
+    data
+  })
+}
