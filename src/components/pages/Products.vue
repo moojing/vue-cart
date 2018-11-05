@@ -1,5 +1,6 @@
 <template>
     <div>
+         <loading :active.sync="isLoading" ></loading>
         <div class="text-right mt-4">
             <button class="btn btn-primary" @click="openModal"   >建立新的產品</button>
         </div>
@@ -56,7 +57,8 @@
             </div>
             <div class="form-group">
               <label for="customFile">或 上傳圖片
-                <i class="fas fa-spinner fa-spin"></i>
+                
+                <i class="fas fa-spinner fa-spin" v-if="status.fileUploading"></i>
               </label>
               <input type="file"   id="customFile" class="form-control"
                 ref="files" @change="uploadFile">
@@ -160,7 +162,7 @@
 import $ from 'jquery'
 import {
     ajaxGetProducts,ajaxPostProducts
-} from '@/api/products'
+} from '@/api/products' 
 
 import {ajaxImageUpload} from '@/api/images'
 export default {
@@ -179,20 +181,27 @@ export default {
                 title: "",
                 unit: ""
         },
+        isLoading:false,
+        status: {
+          fileUploading:false, 
+        }
     }),
     methods: {
         getProducts() {
+            this.isLoading = true
             ajaxGetProducts().then(res => {
                 this.products = res.data.products
+                this.isLoading = false
             })
         },
         openModal() {
             $('#productModal').modal('show')
         },
         updateProduct(){
-            
+             
             ajaxPostProducts({data:this.tempProduct}).then(res=>{
                 console.log('product',res.data);
+                 
             }) 
         },
         uploadFile(){
@@ -200,6 +209,7 @@ export default {
             const uploadFile = this.$refs.files.files[0]
             const formData = new FormData()
             formData.append('file-to-upload',uploadFile)
+             this.status.fileUploading = true
             ajaxImageUpload(formData,{
                     headers:{
                         'Content-Type':'multipart/form-data',
@@ -207,7 +217,7 @@ export default {
                     },
                     
                 }).then(res=>{
-                    console.log(res.data)
+                     this.status.fileUploading = false
                 })
         } 
     },
