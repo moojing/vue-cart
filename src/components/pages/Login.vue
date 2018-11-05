@@ -32,8 +32,7 @@ export default {
        
         this.$http.post(`${api}/admin/signin`,this.user).then(res=>{
            if(res.data.success){
-             console.log('res.data',res);
-             this.$router.push('/')
+             this.$router.push('/admin/products')
            }
           }) 
     }
@@ -42,7 +41,6 @@ export default {
 </script>
 
 <style scoped >
-
 html,
 body {
   height: 100%;
@@ -77,12 +75,12 @@ body {
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="email"] {
+.form-signin input[type='email'] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.form-signin input[type="password"] {
+.form-signin input[type='password'] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;

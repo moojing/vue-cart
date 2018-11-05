@@ -4,32 +4,25 @@ import VueAxios from 'vue-axios'
 import App from './App.vue'
 import router from './router'
 
-
-
-
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true
 Vue.use(VueAxios, axios)
 
 Vue.config.productionTip = false
 
 new Vue({
   router,
-  render: h => h(App),
+  render: h => h(App)
 }).$mount('#app')
-
-
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     const api = `${process.env.VUE_APP_API_BASE}/api/user/check`
-    axios.post(api).then((response) => {
-      console.log(response.data)
-
+    axios.post(api).then(response => {
       if (response.data.success) {
         next()
       } else {
         next({
-          path: '/login',
+          path: '/login'
         })
       }
     })
