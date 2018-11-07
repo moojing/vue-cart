@@ -25,10 +25,10 @@
           <!-- Search bar -->
           <form class="form-inline my-3 my-lg-0">
             <div class="input-group">
-              <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+              <input class="form-control" v-model="searchText"  type="text" placeholder="Search" aria-label="Search">
               <div class="input-group-append">
-                <button class="btn btn-outline-warning" type="submit"  >
-                  <i class="fa fa-search" aria-hidden="true"></i> Search</button>
+                <button class="btn btn-outline-warning" type="submit" @click="onSearchClick" >
+                  <i class="fa fa-search" aria-hidden="true" ></i> Search</button>
               </div>
             </div>
           </form>
@@ -57,26 +57,8 @@
 
         
             </div>
-            <!-- pagination -->
-            <nav aria-label="Page navigation" class="my-5">
-              <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">Next</a>
-                </li>
-              </ul>
-            </nav>
+           
+      
           </div>
 
           <div class="tab-pane" id="list-gift">
@@ -113,16 +95,40 @@ export default {
  data(){
      return{
         products:productsData, 
+        filteredProducts:[],
         categories:[],
         currentCategory:'all', 
+        searchText:'',
+     
      } 
  },
  methods:{
      onCategoryClick(category){
+       
         this.currentCategory = category; 
-     } 
+        this.productFilters();
+     },
+     onSearchClick(){
+       this.productFilters();
+        
+      },
+      productFilters(){
+        let result = this.products; 
+        let searchFilter =(product)=>product.title.match(this.searchText) 
+        let categoryFilter=(product)=> this.currentCategory===product.category
+         if (this.currentCategory=='all'||this.currentCategory==''){
+               this.filteredProducts = result
+        }else{
+           result = result.filter(categoryFilter)
+                       
+        
+        }
+         result = result.filter(searchFilter)
+         this.filteredProducts = result
+     }
  },
  created(){
+    
     let categories = []; 
      productsData.forEach(product => {
         if(categories.indexOf(product.category)<0){
@@ -130,18 +136,10 @@ export default {
         } 
     });
     this.categories = categories  
+    this.productFilters()
  }, 
  computed:{
-     filteredProducts(){
-         let result = this.products; 
-         if (this.currentCategory=='all'||this.currentCategory==''){
-            return result
-         }else{
-            let categoryFilter=(product)=> this.currentCategory===product.category
-            result = result.filter(categoryFilter)
-         }
-        return result
-     }
+   
  } 
  
 }

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
+import FrontPanel from '@/components/FrontPanel'
 import Login from '@/components/admin/pages/Login'
 import Products from '@/components/admin/pages/Products'
 import Dashboard from '@/components/admin/Dashboard'
@@ -15,8 +16,15 @@ export default new Router({
     },
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'FrontPanel',
+      component: FrontPanel,
+      children: [
+        {
+          path: '/',
+          name: 'Home',
+          component: Home
+        }
+      ]
     },
     {
       path: '/admin/login',

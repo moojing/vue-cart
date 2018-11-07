@@ -1,6 +1,6 @@
 <template>
  <div> 
-        <NavBar/>
+       
         <Jumbotron/>
         <ProductList/>
        
@@ -18,7 +18,7 @@ export default {
              
         } 
     }, 
-    components:{NavBar,Jumbotron,ProductList},
+    components:{Jumbotron,ProductList},
     
    
 }
