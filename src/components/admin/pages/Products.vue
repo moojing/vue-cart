@@ -200,7 +200,8 @@ export default {
         updateProduct(){
              
             ajaxPostProducts({data:this.tempProduct}).then(res=>{
-                // console.log('product',res.data);
+              // eslint-disable-next-line
+                 console.log('product',res);
             }) 
         },
         uploadFile(){

@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/pages/Login'
 import Home from '@/components/Home'
-import Dashboard from '@/components/Dashboard'
-import Products from '@/components/pages/Products'
+import Login from '@/components/admin/pages/Login'
+import Products from '@/components/admin/pages/Products'
+import Dashboard from '@/components/admin/Dashboard'
+
 Vue.use(Router)
 
 export default new Router({
@@ -18,7 +19,7 @@ export default new Router({
       component: Home
     },
     {
-      path: '/login',
+      path: '/admin/login',
       name: 'login',
       component: Login
     },

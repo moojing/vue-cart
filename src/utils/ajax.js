@@ -4,7 +4,8 @@ import axios from 'axios'
 const apiUrl = process.env.VUE_APP_API_BASE
 
 let ajax = axios.create({
-  baseURL: apiUrl
+  baseURL: apiUrl,
+  withCredentials:true
 })
 
 const onRequestSuccess = config => {

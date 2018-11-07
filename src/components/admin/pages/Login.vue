@@ -33,6 +33,7 @@ export default {
            if(res.data.success){
              this.$router.push('/admin/products')
            }
+          //  console.log("res",res);
           }) 
     }
   }
