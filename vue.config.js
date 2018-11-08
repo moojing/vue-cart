@@ -1,3 +1,9 @@
 module.exports = {
-  baseUrl: ''
+  baseUrl: '',
+  runtimeCompiler: true,
+  devServer: {
+    watchOptions: {
+      poll: true
+    }
+  }
 }

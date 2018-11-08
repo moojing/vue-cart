@@ -18,7 +18,7 @@ export default {
         logout() {
             ajaxAdminLogout().then(res => {
                 if (res.data.success) {
-                    this.$router.push('/login')
+                    this.$router.push('/admin/login')
                 }
             })
         }

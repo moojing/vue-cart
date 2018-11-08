@@ -4,16 +4,13 @@ import Home from '@/components/Home'
 import FrontPanel from '@/components/FrontPanel'
 import Login from '@/components/admin/pages/Login'
 import Products from '@/components/admin/pages/Products'
+import Product from '@/components/pages/Product'
 import Dashboard from '@/components/admin/Dashboard'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '*',
-      redirect: 'login'
-    },
     {
       path: '/',
       name: 'FrontPanel',
@@ -23,6 +20,11 @@ export default new Router({
           path: '/',
           name: 'Home',
           component: Home
+        },
+        {
+          path: 'product',
+          name: 'product',
+          component: Product
         }
       ]
     },

@@ -9,10 +9,15 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 import App from './App.vue'
 import router from './router'
 import './bus'
+import currencyFilter from '@/filters/Currency'
 
 Vue.config.productionTip = false
+axios.defaults.withCredentials = true
 Vue.use(VueAxios, axios)
+
 Vue.component('Loading', Loading)
+Vue.filter('currencyFilter', currencyFilter)
+
 new Vue({
   router,
   render: h => h(App)
@@ -26,7 +31,7 @@ router.beforeEach((to, from, next) => {
         next()
       } else {
         next({
-          path: '/login'
+          path: '/admin/login'
         })
       }
     })

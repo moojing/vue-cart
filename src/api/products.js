@@ -1,16 +1,16 @@
 import ajax from '@/utils/ajax'
 const customPath = process.env.VUE_APP_API_CUSTOMPATH
 
-export const ajaxGetProducts = () => {
+export const ajaxGetProducts = (page = 1) => {
   return ajax({
-    url: `/api/${customPath}/products`,
+    url: `/api/${customPath}/products?page=${page}`,
     method: 'get'
   })
 }
-export const ajaxPostProducts = data => {
+export const ajaxUpdateProduct = (method, url, data) => {
   return ajax({
-    url: `/api/${customPath}/admin/product`,
-    method: 'post',
+    url,
+    method,
     data
   })
 }
