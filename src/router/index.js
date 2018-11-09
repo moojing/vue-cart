@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import FrontPanel from '@/components/FrontPanel'
 import Login from '@/components/admin/pages/Login'
 import Products from '@/components/admin/pages/Products'
+import CustomOrders from '@/components/admin/pages/CustomOrders'
 import Product from '@/components/pages/Product'
 import Dashboard from '@/components/admin/Dashboard'
 
@@ -44,6 +45,18 @@ export default new Router({
           name: 'Products',
           component: Products,
           meta: { requiresAuth: true }
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'Dashboard',
+      component: Dashboard,
+      children: [
+        {
+          path: 'custom_orders',
+          name: 'CustomOrders',
+          component: CustomOrders
         }
       ]
     }
