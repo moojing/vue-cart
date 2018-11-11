@@ -2,7 +2,7 @@
     <div>
          <loading :active.sync="isLoading" ></loading>
         <div class="text-right mt-4">
-            <button class="btn btn-primary" @click="openModal(true)"   >建立新的產品</button>
+            <button class="btn btn-primary" @click="openEditModal(true)"   >建立新的產品</button>
         </div>
         <table class="table mt-4">
             <thead>
@@ -28,9 +28,15 @@
                         <span v-else>未啟用</span>
                     </td>
                     <td>
-                        <button class="btn btn-outline-primary btn-sm" @click="openModal(false,item)">
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                         <button class="btn btn-outline-primary btn-sm" @click="openEditModal(false,item)">
                             編輯
                         </button>
+                         <button class="btn btn-outline-danger btn-sm" @click="openDeleteModal(item.id)">
+                            刪除
+                        </button>
+                      </div>
+                       
                     </td>
                 </tr>
             </tbody>
@@ -153,7 +159,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-danger"
+        <button type="button" class="btn btn-danger" @click="deleteProduct(status.deleteId)"
           >確認刪除</button>
       </div>
     </div>
@@ -165,7 +171,7 @@
 <script>
 import $ from 'jquery'
 import {
-    ajaxGetProducts,ajaxUpdateProduct
+    ajaxGetProducts,ajaxUpdateProduct,ajaxDeleteProduct
 } from '@/api/products' 
 
 import {ajaxImageUpload} from '@/api/images'
@@ -189,6 +195,7 @@ export default {
         isLoading:false,
         isNew:false,
         status: {
+          deleteId:'',
           fileUploading:false, 
         }, 
         pagination:{},
@@ -196,14 +203,14 @@ export default {
     methods: {
         getProducts(page) {
             this.isLoading = true
-            ajaxGetProducts(page ).then(res => {
+            ajaxGetProducts(page).then(res => {
                 this.products = res.data.products
                 this.pagination = res.data.pagination 
                 this.isLoading = false
               
             })
         },
-        openModal(isNew,item) {
+        openEditModal(isNew,item) {
            
             if(isNew){
               this.tempProduct = {}; 
@@ -214,6 +221,27 @@ export default {
             } 
             $('#productModal').modal('show')
         },
+        openDeleteModal(id){
+           this.status.deleteId = id 
+           $('#delProductModal').modal('show')
+        }, 
+        deleteProduct(id){
+            if(this.status.deleteId){
+               ajaxDeleteProduct(id).then((res)=>{
+                 $('#delProductModal').modal('hide')
+                   if(res.data.success){
+                    this.$bus.$emit('message:push','產品已經刪除！！','danger')
+                   }else{
+                    this.$bus.$emit('message:push','感覺有哪裡不對勁！！','warning')
+                    console.log(res.data);
+                   }
+                this.status.deleteId='',
+                this.getProducts()
+            }) 
+            }
+           
+        },
+      
         updateProduct(){
             const customPath = process.env.VUE_APP_API_CUSTOMPATH
             let api =  `/api/${customPath}/admin/product`

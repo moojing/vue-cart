@@ -9,7 +9,7 @@
 
 <script>
 
-import NavBar from "@/components/Nav" 
+
 import Jumbotron from "@/components/Jumbotron"
 import ProductList from "@/components/ProductList"
 export default {

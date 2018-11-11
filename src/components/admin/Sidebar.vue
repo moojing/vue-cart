@@ -15,6 +15,17 @@
                         Products <span class="sr-only">(current)</span>
                     </router-link>
                 </li>
+               
+            </ul>
+
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>模擬功能</span>
+                
+                <span data-feather="plus-circle"></span>
+              
+            </h6>
+            <ul class="nav flex-column">
                 <li class="nav-item">
                     <router-link class="nav-link" :to="{ path: '/custom_orders' }" 
                         :class="{active:$route.path=='/custom_orders'}">
