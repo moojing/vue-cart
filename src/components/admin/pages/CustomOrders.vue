@@ -2,7 +2,7 @@
     <div>
         <loading :active.sync="isLoading"></loading>
         <div class="row mt-4">
-           <div class="card border-0 shadow-sm mx-3" style="width: 18rem;" v-for="product in products" :key="product.id">
+           <div class="card border-0 shadow-sm mx-4" style="width: 18rem;" v-for="product in products" :key="product.id">
                  
                 <img :src="product.imageUrl" alt="" class=" card-img-top ">
                  
@@ -13,8 +13,8 @@
                 </h5>
                 <p class="card-text">{{product.content}}</p>
                 <div class="d-flex justify-content-between align-items-baseline">
-                    <div class="h5" v-if="!product.price">{{product.price_origin}} 元</div>
-                    <del class="h6" v-if="product.price">原價 {{product.price_origin}} 元</del>
+                    <div class="h5" v-if="!product.price">{{product.origin_price}} 元</div>
+                    <del class="h6" v-if="product.price">原價 {{product.origin_price}} 元</del>
                     <div class="h5" v-if="product.price">現在只要 {{product.price}} 元</div>
                 </div>
                 </div>
@@ -41,7 +41,21 @@
                     </h5>
                     
                 </div>
-              
+
+                <div class="modal-body px-5   ">
+                   <div class="row justify-content-center">
+                        <img :src="product.imageUrl" alt="" class="img-fluid ">
+                   </div>
+                   <div class="row mb-3"> 
+                       {{product.content}}
+                   </div>
+                   <div class="row justify-content-between align-items-baseline">
+                        <div class="h5" v-if="!product.price">{{product.origin_price}} 元</div>
+                        <del class="h6" v-if="product.price">原價 {{product.origin_price}} 元</del>
+                        <div class="h5" v-if="product.price">現在只要 {{product.price}} 元</div>
+                    </div>
+                
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
                     <button type="button" class="btn btn-primary"

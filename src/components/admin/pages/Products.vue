@@ -258,6 +258,7 @@ export default {
                     this.$bus.$emit('message:push','產品資料更新成功！！','success')
                    }else{
                     this.$bus.$emit('message:push','感覺有哪裡不對勁！！','warning')
+                    console.log(res);
                    }
 
                 this.getProducts()
