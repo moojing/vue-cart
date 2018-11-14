@@ -2,7 +2,7 @@
     <div>
         <loading :active.sync="isLoading"></loading>
         <div class="row mt-4">
-           <div class="card border-0 shadow-sm mx-4" style="width: 18rem;" v-for="product in products" :key="product.id">
+           <div class="card border-0 shadow-sm mx-4 my-3" style="width: 18rem;" v-for="product in products" :key="product.id">
                  
                 <img :src="product.imageUrl" alt="" class=" card-img-top ">
                  
@@ -54,12 +54,19 @@
                         <del class="h6" v-if="product.price">原價 {{product.origin_price}} 元</del>
                         <div class="h5" v-if="product.price">現在只要 {{product.price}} 元</div>
                     </div>
-                
+                    <div class="row justify-content-between align-items-baseline">
+                      <select name="qty" v-model="qty">
+                        <option value="1">選購1個</option>
+                        <option value="2">選購2個</option>
+                        <option value="3">選購3個</option>
+                        <option value="4">選購4個</option>
+                        <option value="5">選購5個</option>
+                      </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary"
-                    >確認刪除</button>
+                    <button type="button" class="btn btn-primary" @click="addToCart(product.id)">加入購物車</button>
                 </div>
                 </div>
             </div>
@@ -71,6 +78,9 @@
 import {
     ajaxGetProducts,ajaxGetProduct
 } from '@/api/products'
+import {
+    ajaxPostCart
+} from '@/api/cart'
 import $ from 'jquery'
 export default {
     data(){
@@ -80,7 +90,8 @@ export default {
                 loadingItem:false
             },
             products:[], 
-            product:{}
+            product:{},
+            qty:0,
         } 
     }, 
     methods:{
@@ -88,7 +99,6 @@ export default {
         this.isLoading = true
         ajaxGetProducts().then(res => {
             this.products = res.data.products
-            console.log(res.data.products)
             this.isLoading = false
 
         })
@@ -96,11 +106,23 @@ export default {
     getProduct(id){
         this.status.loadingItem = id
         ajaxGetProduct(id).then(res=>{
-            console.log(res)
             $('#ProductModal').modal('show')
             this.product = res.data.product
             this.status.loadingItem = '' 
         })
+    },
+    addToCart(product_id){
+       this.isLoading = true
+      let data = {
+        product_id, qty:this.qty
+      }
+      ajaxPostCart({data}).then(res=>{
+        if(res.data.status="success"){
+           $('#ProductModal').modal('hide')
+            this.isLoading = false
+             this.$bus.$emit('message:push','已加入購物車','success')
+        }
+      })
     }
 
    
