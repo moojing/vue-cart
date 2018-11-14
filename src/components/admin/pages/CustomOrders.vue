@@ -23,12 +23,32 @@
                     <i class="fas fa-spinner fa-spin" v-if="status.loadingItem == product.id"></i>
                     查看更多
                 </button>
-                <button type="button" class="btn btn-outline-danger btn-sm ml-auto">
-                    <!-- <i class="fas fa-spinner fa-spin"></i> -->
+                <button type="button" class="btn btn-outline-danger btn-sm ml-auto"  @click="addToCart(product.id)">
+                  <i class="fas fa-spinner fa-spin" v-if="status.loadingItem == product.id"></i>
                     加到購物車
                 </button>
                 </div>
             </div>
+        </div>
+        <div class="row mt-5 d-flex justify-content-center" > 
+          <div class="col-md-6">
+             <table class="table table-striped" >
+              <thead>
+                <tr>
+                  <th>品名</th>
+                  <th>數量</th>
+                  <th>單價</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(cart,index) in carts" :key="index" >
+                  <td>{{cart.product.title}}</td>
+                  <td>{{cart.qty}} / {{cart.unit}}</td>
+                  <td>john@example.com</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div class="modal fade" id="ProductModal" tabindex="-1" role="dialog"
@@ -55,8 +75,8 @@
                         <div class="h5" v-if="product.price">現在只要 {{product.price}} 元</div>
                     </div>
                     <div class="row justify-content-between align-items-baseline">
-                      <select name="qty" v-model="qty">
-                        <option value="1">選購1個</option>
+                      <select name="qty" v-model="qty"  class="form-control">
+                        <option value="1" selected >選購1個</option>
                         <option value="2">選購2個</option>
                         <option value="3">選購3個</option>
                         <option value="4">選購4個</option>
@@ -79,7 +99,7 @@ import {
     ajaxGetProducts,ajaxGetProduct
 } from '@/api/products'
 import {
-    ajaxPostCart
+    ajaxPostCart,ajaxGetCart
 } from '@/api/cart'
 import $ from 'jquery'
 export default {
@@ -91,7 +111,8 @@ export default {
             },
             products:[], 
             product:{},
-            qty:0,
+            qty:1,
+            carts:[],
         } 
     }, 
     methods:{
@@ -104,20 +125,26 @@ export default {
         })
     },
     getProduct(id){
-        this.status.loadingItem = id
-        ajaxGetProduct(id).then(res=>{
-            $('#ProductModal').modal('show')
-            this.product = res.data.product
-            this.status.loadingItem = '' 
-        })
+      this.status.loadingItem = id
+      ajaxGetProduct(id).then(res=>{
+          $('#ProductModal').modal('show')
+          this.product = res.data.product
+          this.status.loadingItem = '' 
+      })
     },
+    getCarts(){
+      ajaxGetCart().then(res=>{
+        console.log(res.data)
+        this.carts = res.data.carts
+      })
+    }, 
     addToCart(product_id){
        this.isLoading = true
       let data = {
         product_id, qty:this.qty
       }
       ajaxPostCart({data}).then(res=>{
-        if(res.data.status="success"){
+        if(res.data.status==="success"){
            $('#ProductModal').modal('hide')
             this.isLoading = false
              this.$bus.$emit('message:push','已加入購物車','success')
@@ -129,6 +156,7 @@ export default {
    },
     created(){
         this.getProducts()
+        this.getCarts()
     }
 }
 </script>
