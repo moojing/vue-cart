@@ -30,11 +30,13 @@
                 </div>
             </div>
         </div>
+        
         <div class="row mt-5 d-flex justify-content-center" > 
           <div class="col-md-6">
              <table class="table table-striped" >
               <thead>
                 <tr>
+                  <th></th>
                   <th>品名</th>
                   <th>數量</th>
                   <th>單價</th>
@@ -42,9 +44,10 @@
               </thead>
               <tbody>
                 <tr v-for="(cart,index) in carts" :key="index" >
+                  <td><div class="btn btn-danger btm-sm">刪除</div></td>
                   <td>{{cart.product.title}}</td>
-                  <td>{{cart.qty}} / {{cart.unit}}</td>
-                  <td>john@example.com</td>
+                  <td width="60px">{{cart.qty}} / 張</td>
+                  <td>{{cart.product.price}} </td>
                 </tr>
               </tbody>
             </table>
@@ -134,8 +137,7 @@ export default {
     },
     getCarts(){
       ajaxGetCart().then(res=>{
-        console.log(res.data)
-        this.carts = res.data.carts
+        this.carts = res.data.data.carts
       })
     }, 
     addToCart(product_id){
