@@ -43,14 +43,35 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(cart,index) in carts" :key="index" >
-                  <td><div class="btn btn-danger btm-sm">刪除</div></td>
+                <tr v-for="(cart,index) in carts.carts" :key="index" >
+                  <td><div class="btn btn-danger btm-sm" @click="deleteCartProduct(cart.id)">刪除</div></td>
                   <td>{{cart.product.title}}</td>
                   <td width="60px">{{cart.qty}} / 張</td>
                   <td>{{cart.product.price}} </td>
                 </tr>
+               
               </tbody>
+              <tfoot>
+                <tr>
+                    <td colspan="3" class="text-right">總計</td>
+                    <td>{{carts.total}}</td>
+                   
+                </tr>
+                <tr r v-if="carts.total !== carts.final_total">
+                    <td colspan="3"  class="text-right text-success ">折扣價</td>
+                    <td  class="text-success">{{carts.final_total}}</td>
+                </tr>
+              </tfoot>
             </table>
+            
+            <div class="input-group mb-3">
+                <input type="text" class="form-control"
+                       v-model="couponCode" 
+                       placeholder="輸入優惠碼" aria-label="輸入優惠碼" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" @click="applyCoupon(couponCode)" >套用優惠碼</button>
+                </div>
+            </div>
           </div>
         </div>
 
@@ -60,7 +81,10 @@
                 <div class="modal-content border-0">
                 <div class="modal-header  ">
                     <h5 class="modal-title" >
-                         <span>{{product.title}}</span>
+                        <span>{{product.title}}</span>
+                        <div class="text-success" v-if="product.coupon">
+                            已套用優惠卷
+                        </div>
                     </h5>
                     
                 </div>
@@ -102,8 +126,11 @@ import {
     ajaxGetProducts,ajaxGetProduct
 } from '@/api/products'
 import {
-    ajaxPostCart,ajaxGetCart
+    ajaxPostCart,ajaxGetCart,ajaxDeleteCart
 } from '@/api/cart'
+import {
+    ajaxPostCoupon
+} from '@/api/coupons'
 import $ from 'jquery'
 export default {
     data(){
@@ -116,10 +143,11 @@ export default {
             product:{},
             qty:1,
             carts:[],
+            couponCode:'' 
         } 
     }, 
     methods:{
-        getProducts() {
+    getProducts() {
         this.isLoading = true
         ajaxGetProducts().then(res => {
             this.products = res.data.products
@@ -137,24 +165,43 @@ export default {
     },
     getCarts(){
       ajaxGetCart().then(res=>{
-        this.carts = res.data.data.carts
+         
+        this.carts = res.data.data
       })
     }, 
     addToCart(product_id){
        this.isLoading = true
-      let data = {
+      let data = { 
         product_id, qty:this.qty
       }
       ajaxPostCart({data}).then(res=>{
-        if(res.data.status==="success"){
+          
+        if(res.data.success){
            $('#ProductModal').modal('hide')
             this.isLoading = false
-             this.$bus.$emit('message:push','已加入購物車','success')
+            this.$bus.$emit('message:push','已加入購物車','success')
+            this.getCarts()
         }
       })
+    },
+    deleteCartProduct(id){
+        this.isLoading = true
+        ajaxDeleteCart(id).then(res=>{
+        if(res.data.success){
+        $('#ProductModal').modal('hide')
+            this.isLoading = false
+            this.$bus.$emit('message:push','已刪除購物車商品！','danger')
+            this.getCarts()
+        }
+        })
+    },
+    applyCoupon(code){
+        ajaxPostCoupon({data:{code}}).then(res=>{
+            console.log('res',res.data);
+            this.getCarts()
+        })
     }
-
-   
+    
    },
     created(){
         this.getProducts()

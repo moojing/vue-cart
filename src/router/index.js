@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import FrontPanel from '@/components/FrontPanel'
 import Login from '@/components/admin/pages/Login'
 import Products from '@/components/admin/pages/Products'
+import Coupons from '@/components/admin/pages/Coupons'
 import CustomOrders from '@/components/admin/pages/CustomOrders'
 import Product from '@/components/pages/Product'
 import Dashboard from '@/components/admin/Dashboard'
@@ -44,6 +45,12 @@ export default new Router({
           path: 'products',
           name: 'Products',
           component: Products,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'coupons',
+          name: 'coupons',
+          component: Coupons,
           meta: { requiresAuth: true }
         }
       ]

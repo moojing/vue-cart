@@ -15,10 +15,14 @@
                         Products <span class="sr-only">(current)</span>
                     </router-link>
                 </li>
-               
+                 <li class="nav-item">
+                    <router-link class="nav-link" :to="{ path: '/admin/coupons' }" 
+                        :class="{active:$route.path=='/admin/coupons'}">
+                        <span data-feather="coupons"></span>
+                        Coupons  
+                    </router-link>
+                </li>
             </ul>
-
-
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                 <span>模擬功能</span>
                 
