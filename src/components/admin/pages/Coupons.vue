@@ -40,7 +40,7 @@
             <div class="modal-content border-0">
               <div class="modal-header bg-dark text-white">
                 <h5>
-                  <span>新增優惠勸</span>
+                  <span>新增優惠券</span>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -49,7 +49,12 @@
               <div class="modal-body">
                 <div class="row">
                   <div class="col-sm-4">
-             
+                        <div class="form group">
+                            <label for="title">標題</label>
+                            <input type="text" v-model="tempProduct.title" class="form-control" id="title"
+                                placeholder="請輸入標題">
+                        </div>
+
                   </div>
                   <div class="col-sm-8">
                     
