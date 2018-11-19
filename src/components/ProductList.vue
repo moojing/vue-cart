@@ -47,9 +47,14 @@
                   </div>
                   <div class="card-footer border-top-0 bg-white">
                    <div class="row">
-                     <div class="col-md-6"> <a href="#" class="btn btn-outline-secondary btn-block btn-sm">
-                      <i class="fa fa-cart-plus" aria-hidden="true"></i> 搶購去
-                    </a></div>
+                    <div class="col-md-6"> 
+                      <router-link   :to="`/product/${product.id}`">
+                        <a href="#" class="btn btn-outline-secondary btn-block btn-sm">
+                          <i class="fa fa-cart-plus" aria-hidden="true"></i> 搶購去
+                        </a>
+                      </router-link>
+                      
+                    </div>
                      <div class="col-md-6">
                        <a href="###" class="btn btn-outline-danger btn-sm" @click="addToCart(product.id)" >
                       <i class="fa fa-cart-plus" aria-hidden="true"></i> 加入購物車
@@ -93,15 +98,20 @@ export default {
         
       },
       productFilters(){
-        let result = this.products; 
-        let searchFilter =(product)=>product.title.match(this.searchText) 
+       
+        let searchFilter =(product)=>product.title.match(this.searchText) !== null
         let categoryFilter=(product)=> this.currentCategory===product.category
+        let enableFilter = (product)=> product.is_enabled ===true
+        
          ajaxGetAllProducts().then(res=>{
-            this.products = res.data.products
+             this.products =  res.data.products 
+             let result = res.data.products
+             console.log('result',result);
+              result = result.filter(enableFilter)
               if ((this.currentCategory=='all'||this.currentCategory=='')){
                 result = this.products;
               }else{
-                result = result.filter(searchFilter).filter(categoryFilter)
+                result = result.filter(categoryFilter).filter(searchFilter)
               }
                
               this.filteredProducts = result

@@ -1,6 +1,6 @@
 <template>
  <div> 
-       
+      
         <Jumbotron/>
         <ProductList/>
        
@@ -12,6 +12,7 @@
 
 import Jumbotron from "@/components/Jumbotron"
 import ProductList from "@/components/ProductList"
+
 export default {
     components:{Jumbotron,ProductList},
 }

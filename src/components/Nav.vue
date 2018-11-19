@@ -17,7 +17,7 @@
             <tr v-for="cart in carts" :key="cart.id">
              
               <td class="align-middle"> {{cart.product.title}}</td>
-              <td class="align-middle">1張</td>
+              <td class="align-middle">{{cart.qty}}張</td>
               <td class="align-middle text-right">{{cart.product.price}}</td>
                <td class="align-middle text-center">
                 <a  class=" btn btn-outline-secondary" data-toggle="modal" @click="$store.commit('deleteCarts',cart.id)" >
