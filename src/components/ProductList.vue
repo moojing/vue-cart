@@ -46,36 +46,16 @@
                     <p class="card-text">{{product.content}}</p>
                   </div>
                   <div class="card-footer border-top-0 bg-white">
-                    <a href="#" class="btn btn-outline-secondary btn-block btn-sm">
+                   <div class="row">
+                     <div class="col-md-6"> <a href="#" class="btn btn-outline-secondary btn-block btn-sm">
                       <i class="fa fa-cart-plus" aria-hidden="true"></i> 搶購去
+                    </a></div>
+                     <div class="col-md-6">
+                       <a href="###" class="btn btn-outline-danger btn-sm" @click="addToCart(product.id)" >
+                      <i class="fa fa-cart-plus" aria-hidden="true"></i> 加入購物車
                     </a>
-                  </div>
-                </div>
-              </div>
-
- 
-
-        
-            </div>
-           
-      
-          </div>
-
-          <div class="tab-pane" id="list-gift">
-            <div class="row align-items-stretch">
-              <!-- 禮品 -->
-              <div class="col-md-4 mb-4">
-                <div class="card border-0 box-shadow text-center h-100">
-                  <img class="card-img-top" src="https://images.unsplash.com/photo-1482173074468-5b323335debe?w=1350" alt="Card image cap">
-                  <div class="card-body">
-                    <h4 class="card-title">超精緻禮物</h4>
-                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content
-                      is a little bit longer.</p>
-                  </div>
-                  <div class="card-footer border-top-0 bg-white">
-                    <a href="#" class="btn btn-outline-secondary btn-block btn-sm">
-                      <i class="fa fa-cart-plus" aria-hidden="true"></i> 搶購去
-                    </a>
+                     </div>
+                   </div>
                   </div>
                 </div>
               </div>
@@ -90,8 +70,8 @@
 </template>
 
 <script>
-
 import {ajaxGetAllProducts} from "@/api/products"
+import {ajaxPostCart} from "@/api/cart"
 export default {
  data(){
      return{
@@ -100,7 +80,6 @@ export default {
         categories:[],
         currentCategory:'all', 
         searchText:'',
-     
      } 
  },
  methods:{
@@ -139,7 +118,19 @@ export default {
             } 
         });
         this.categories = categories  
-     }
+     },
+     addToCart(product_id){
+     
+      let data = { 
+        product_id, qty:1
+      }
+      ajaxPostCart({data}).then(res=>{
+        if(res.data.success){
+            this.$bus.$emit('message:push','已加入購物車!','success')
+            this.$store.commit('getCarts')
+        }
+      })
+    },
  },
  created(){
     this.productFilters()

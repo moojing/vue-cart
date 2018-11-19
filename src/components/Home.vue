@@ -13,14 +13,7 @@
 import Jumbotron from "@/components/Jumbotron"
 import ProductList from "@/components/ProductList"
 export default {
-    data(){
-        return {
-             
-        } 
-    }, 
     components:{Jumbotron,ProductList},
-    
-   
 }
 </script>
 

@@ -1,6 +1,6 @@
-import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import Vue from "vue";
 import "bootstrap";
 import "jquery";
 import VeeValidate from "vee-validate";
@@ -10,6 +10,7 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import App from "./App.vue";
 import router from "./router";
 import "./bus";
+import store from "@/store";
 import currencyFilter from "@/filters/Currency";
 
 Vue.config.productionTip = false;
@@ -20,6 +21,7 @@ Vue.component("Loading", Loading);
 Vue.filter("currencyFilter", currencyFilter);
 
 new Vue({
+  store,
   router,
   render: h => h(App)
 }).$mount("#app");
