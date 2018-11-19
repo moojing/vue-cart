@@ -74,6 +74,54 @@
             </div>
           </div>
         </div>
+        <div class="row mt-3 mb-5 d-flex justify-content-center">
+         
+           
+
+
+          <form  class="col-md-6" @submit.prevent="createOrder">
+            <div class="form-group">
+              <label for="content">Email</label>
+              <input type="text"  v-validate="'required|email'"
+                :class="{'is-invalid': errors.has('email')}"
+                name="email" class="form-control" v-model="order.user.email">
+                 <div class="text-danger" v-if="errors.has('email')">Email 格式必須正確</div>
+            </div>
+         
+            <div class="form-group">
+              <label for="content">收件人姓名</label>
+              <input v-validate="'required'"  type="text" 
+                name="name" class="form-control" v-model="order.user.name"
+                :class="{'is-invalid': errors.has('name')}"
+                data-vv-delay="100">
+               
+              <div class="text-danger" v-if="errors.has('name')">請輸入姓名</div>
+            </div>
+
+            <div class="form-group">
+              <label for="content">收件人電話</label>
+              <input type="text" class="form-control" 
+                v-model="order.user.tel"
+                name="tel"
+                :class="{'is-invalid': errors.has('tel')}"
+                v-validate="'required'"
+                >
+              <div class="text-danger" v-if="errors.has('tel')">請輸入聯絡電話</div>
+            </div>
+
+            <div class="form-group">
+              <label for="content">收件人住址</label>
+            <input type="text" class="form-control" v-model="order.user.adress">
+            </div>
+
+            <div class="form-group">
+              <label for="content">留言</label>
+              <textarea class="form-control" v-model="order.message"></textarea>
+            </div>
+            <input type="submit"  class="form-control">
+           </form>
+
+          </div>
 
         <div class="modal fade" id="ProductModal" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -126,11 +174,15 @@ import {
     ajaxGetProducts,ajaxGetProduct
 } from '@/api/products'
 import {
-    ajaxPostCart,ajaxGetCart,ajaxDeleteCart
+    ajaxGetCart,ajaxDeleteCart,ajaxPostCart
 } from '@/api/cart'
 import {
-    ajaxPostCoupon
+    ajaxPostOrder
+} from '@/api/order'
+import {
+    ajaxUpdateCoupon
 } from '@/api/coupons'
+
 import $ from 'jquery'
 export default {
     data(){
@@ -143,7 +195,17 @@ export default {
             product:{},
             qty:1,
             carts:[],
-            couponCode:'' 
+            couponCode:'',
+            order:{
+              user:{
+                email:'',
+                tel:'',
+                adress:'', 
+                name:'',
+              }, 
+                message: "" 
+            },
+             
         } 
     }, 
     methods:{
@@ -196,10 +258,27 @@ export default {
         })
     },
     applyCoupon(code){
-        ajaxPostCoupon({data:{code}}).then(res=>{
-            console.log('res',res.data);
+      const customPath = process.env.VUE_APP_API_CUSTOMPATH
+      let api =  `/api/${customPath}/admin/coupon`
+    
+        ajaxUpdateCoupon('post',api,{data:{code}}).then(()=>{
+             
             this.getCarts()
         })
+    },
+    createOrder(){
+
+       this.$validator.validate().then(result => {
+        if (!result) {
+          console.log('欄位不完整')
+        }else{
+            ajaxPostOrder({data:this.order}).then((res)=>{
+              console.log('已送出訂單',res);
+                this.getCarts()
+            })
+        }
+      });
+    
     }
     
    },

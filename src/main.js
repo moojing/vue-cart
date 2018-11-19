@@ -1,41 +1,42 @@
-import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-import 'bootstrap'
-import 'jquery'
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+import "bootstrap";
+import "jquery";
+import VeeValidate from "vee-validate";
 
-import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/vue-loading.css'
-import App from './App.vue'
-import router from './router'
-import './bus'
-import currencyFilter from '@/filters/Currency'
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+import App from "./App.vue";
+import router from "./router";
+import "./bus";
+import currencyFilter from "@/filters/Currency";
 
-Vue.config.productionTip = false
-axios.defaults.withCredentials = true
-Vue.use(VueAxios, axios)
-
-Vue.component('Loading', Loading)
-Vue.filter('currencyFilter', currencyFilter)
+Vue.config.productionTip = false;
+axios.defaults.withCredentials = true;
+Vue.use(VueAxios, axios);
+Vue.use(VeeValidate);
+Vue.component("Loading", Loading);
+Vue.filter("currencyFilter", currencyFilter);
 
 new Vue({
   router,
   render: h => h(App)
-}).$mount('#app')
+}).$mount("#app");
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
-    const api = `${process.env.VUE_APP_API_BASE}/api/user/check`
+    const api = `${process.env.VUE_APP_API_BASE}/api/user/check`;
     axios.post(api).then(response => {
       if (response.data.success) {
-        next()
+        next();
       } else {
         next({
-          path: '/admin/login'
-        })
+          path: "/admin/login"
+        });
       }
-    })
+    });
   } else {
-    next()
+    next();
   }
-})
+});

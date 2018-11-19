@@ -48,22 +48,33 @@
               </div>
               <div class="modal-body">
                 <div class="row">
-                  <div class="col-sm-4">
+                  <div class="col-sm-6 ">
                         <div class="form group">
-                            <label for="title">標題</label>
-                            <input type="text" v-model="tempProduct.title" class="form-control" id="title"
+                            <label for="title">優惠名稱</label>
+                            <input type="text" v-model="tempCoupon.title" class="form-control" id="title"
                                 placeholder="請輸入標題">
                         </div>
-
-                  </div>
-                  <div class="col-sm-8">
-                    
-                    
-
-                   
-                      
+                        <div class="form group">
+                            <label for="title">優惠代碼</label>
+                            <input type="text" v-model="tempCoupon.code" class="form-control" id="title"
+                                placeholder="優惠代碼">
+                        </div>
                     
                   </div>
+                  <div class="col-sm-6 ">
+                        <div class="form group">
+                            <label for="title">優惠內容</label>
+                            <input type="text" v-model="tempCoupon.percent" class="form-control" id="title"
+                                placeholder="優惠內容">
+                        </div>
+                         <div class="form-check">
+                          <input class="form-check-input" v-model="tempCoupon.is_enabled"  type="checkbox" value="1" id="defaultCheck1">
+                          <label class="form-check-label" for="defaultCheck1">
+                           是否啟用
+                          </label>
+                        </div>
+                  </div>
+                
                 </div>
               </div>
               <div class="modal-footer">
@@ -73,13 +84,39 @@
             </div>
           </div>
     </div>
+
+
+
+    <div class="modal fade" id="delProductModal" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content border-0">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="exampleModalLabel">
+            <span>刪除產品</span>
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          是否刪除 <strong class="text-danger">{{ tempCoupon.title }}</strong> 商品(刪除後將無法恢復)。
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-danger" @click="deleteCoupon(status.deleteId)"
+            >確認刪除</button>
+        </div>
+      </div>
+    </div>
+  </div>
     
     </div>
 </template>
 
 <script>
 import {
-    ajaxGetCoupon,ajaxUpdateCoupon
+    ajaxGetCoupon,ajaxUpdateCoupon,ajaxDeleteCoupon
 } from '@/api/coupons'
 import $ from 'jquery'  
 export default {
@@ -91,7 +128,14 @@ export default {
         coupons:[],
         pagination:{},
         isLoading:false,
-        tempCoupon:{}
+        tempCoupon:{
+          title:'', 
+          is_enabled:'', 
+          percent:''
+        },
+        status:{
+          deleteId:''
+        }
       }
     },
   methods:{
@@ -105,23 +149,38 @@ export default {
               
             })
     },
-    updateCoupon(){
-
-    },
+    
     openEditModal(isNew,item) {
         if(isNew){
-            this.tempProduct = {}; 
+            this.tempCoupon = {}; 
             this.isNew = true; 
         }else{
-            this.tempProduct = {...item}; 
+            this.tempCoupon = {...item}; 
             this.isNew = false;
         } 
         $('#couponModal').modal('show')
     },
-    openDeleteModal(){
-        
-    },
-    updateProduct(){
+    openDeleteModal(id){
+        this.status.deleteId = id 
+        $('#delProductModal').modal('show')
+    }, 
+    deleteCoupon(id){
+            if(this.status.deleteId){
+               ajaxDeleteCoupon(id).then((res)=>{
+                 $('#delProductModal').modal('hide')
+                   if(res.data.success){
+                    this.$bus.$emit('message:push','已刪除優惠券！！','danger')
+                   }else{
+                    this.$bus.$emit('message:push','感覺有哪裡不對勁！！','warning')
+                    console.log(res.data)
+                   }
+                this.status.deleteId='',
+                this.getCoupons()
+            }) 
+            }
+           
+        },
+    updateCoupon(){
         const customPath = process.env.VUE_APP_API_CUSTOMPATH
         let api =  `/api/${customPath}/admin/coupon`
         let httpMethod = 'post'
@@ -132,15 +191,16 @@ export default {
         }
 
         ajaxUpdateCoupon(httpMethod,api,{data:this.tempCoupon}).then((res)=>{
-            $('#productModal').modal('hide')
+            $('#couponModal').modal('hide')
                 if(res.data.success){
                 this.$bus.$emit('message:push','產品資料更新成功！！','success')
                 }else{
+                  console.log(res.data)
                 this.$bus.$emit('message:push','感覺有哪裡不對勁！！','warning')
                
                 }
 
-            this.getProducts()
+            this.getCoupons()
 
         }).catch(err=>{
             // eslint-disable-next-line
