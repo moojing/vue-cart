@@ -40,10 +40,10 @@
               <!-- 金牌 -->
                 <div v-for="(product,index) in filteredProducts" :key="index" class="col-md-4 mb-4">
                 <div class="card border-0 box-shadow text-center h-100">
-                  <img class="card-img-top" :src="product.image" alt="Card image cap">
+                  <img class="card-img-top" :src="product.imageUrl" alt="Card image cap">
                   <div class="card-body">
                     <h4 class="card-title">{{product.title}}</h4>
-                    <p class="card-text">{{product.description}}</p>
+                    <p class="card-text">{{product.content}}</p>
                   </div>
                   <div class="card-footer border-top-0 bg-white">
                     <a href="#" class="btn btn-outline-secondary btn-block btn-sm">
@@ -90,11 +90,12 @@
 </template>
 
 <script>
-import productsData from "@/static/products"
+
+import {ajaxGetAllProducts} from "@/api/products"
 export default {
  data(){
      return{
-        products:productsData, 
+        products:[], 
         filteredProducts:[],
         categories:[],
         currentCategory:'all', 
@@ -116,27 +117,34 @@ export default {
         let result = this.products; 
         let searchFilter =(product)=>product.title.match(this.searchText) 
         let categoryFilter=(product)=> this.currentCategory===product.category
-         if (this.currentCategory=='all'||this.currentCategory==''){
-               this.filteredProducts = result
-        }else{
-           result = result.filter(categoryFilter)
-                       
-        
-        }
-         result = result.filter(searchFilter)
-         this.filteredProducts = result
+         ajaxGetAllProducts().then(res=>{
+            this.products = res.data.products
+              if ((this.currentCategory=='all'||this.currentCategory=='')){
+                result = this.products;
+              }else{
+                result = result.filter(searchFilter).filter(categoryFilter)
+              }
+               
+              this.filteredProducts = result
+              this.getCategories()
+         })
+       
+     },
+     getCategories(){
+        let categories = []; 
+     
+        this.products.forEach(product => {
+            if(categories.indexOf(product.category)<0){
+                categories.push(product.category)
+            } 
+        });
+        this.categories = categories  
      }
  },
  created(){
-    
-    let categories = []; 
-     productsData.forEach(product => {
-        if(categories.indexOf(product.category)<0){
-            categories.push(product.category)
-        } 
-    });
-    this.categories = categories  
     this.productFilters()
+   
+    
  }, 
  computed:{
    
