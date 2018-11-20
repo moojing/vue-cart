@@ -8,3 +8,9 @@ export const ajaxPostOrder = data => {
     data
   });
 };
+export const ajaxGetOrder = id => {
+  return ajax({
+    url: `/api/${customPath}/order/${id}`,
+    method: "get"
+  });
+};

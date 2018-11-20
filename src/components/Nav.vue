@@ -1,6 +1,6 @@
 <template>
     <div class="navbar">
-        <a href="#" class="logo">
+        <a href="/" class="logo">
                  <div class="logo-img"> </div>
                  <span>黑木音樂</span>
         </a>
@@ -28,9 +28,11 @@
          
           </tbody>
         </table>
-        <a href="shoppingCart-checkout.html" class="btn btn-primary btn-block">
-          <i class="fa fa-cart-plus" aria-hidden="true"></i> 結帳去
-        </a>
+          <router-link to="/checkout">
+            <a href="" class="btn btn-primary btn-block">
+            <i class="fa fa-cart-plus" aria-hidden="true"></i> 結帳去
+            </a>
+          </router-link>
       </div>
     </div>
          
@@ -41,10 +43,7 @@
  
 import {mapState} from "vuex"
 export default {
-  data(){
-    return{
-    }
-  },
+  
   created(){
     this.getCarts()
   },

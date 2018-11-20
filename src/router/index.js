@@ -8,7 +8,8 @@ import Coupons from "@/components/admin/pages/Coupons";
 import CustomOrders from "@/components/admin/pages/CustomOrders";
 import Product from "@/components/pages/Product";
 import Dashboard from "@/components/admin/Dashboard";
-
+import Checkout from "@/components/pages/Checkout";
+import Purchase from "@/components/pages/Purchase";
 Vue.use(Router);
 
 export default new Router({
@@ -27,6 +28,16 @@ export default new Router({
           path: "product/:id",
           name: "product",
           component: Product
+        },
+        {
+          path: "checkout",
+          name: "checkout",
+          component: Checkout
+        },
+        {
+          path: "purchase/:orderId",
+          name: "purchase",
+          component: Purchase
         }
       ]
     },

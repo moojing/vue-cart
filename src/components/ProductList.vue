@@ -106,7 +106,6 @@ export default {
          ajaxGetAllProducts().then(res=>{
              this.products =  res.data.products 
              let result = res.data.products
-             console.log('result',result);
               result = result.filter(enableFilter)
               if ((this.currentCategory=='all'||this.currentCategory=='')){
                 result = this.products;

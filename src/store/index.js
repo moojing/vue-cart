@@ -5,12 +5,14 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    carts: []
+    carts: [],
+    cartsTotal: 0
   },
   mutations: {
     getCarts(state) {
       ajaxGetCart().then(res => {
         state.carts = res.data.data.carts;
+        state.cartsTotal = res.data.data.total;
       });
     },
     deleteCarts(state, id) {
