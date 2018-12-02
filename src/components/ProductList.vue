@@ -48,10 +48,8 @@
                   <div class="card-footer border-top-0 bg-white">
                    <div class="row">
                     <div class="col-md-6"> 
-                      <router-link   :to="`/product/${product.id}`">
-                        <a href="#" class="btn btn-outline-secondary btn-block btn-sm">
+                      <router-link   class="btn btn-outline-secondary btn-block btn-sm" :to="`/product/${product.id}`">
                           <i class="fa fa-cart-plus" aria-hidden="true"></i> 搶購去
-                        </a>
                       </router-link>
                       
                     </div>
