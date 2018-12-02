@@ -1,29 +1,8 @@
-# vue-cart
+# To see the result: 
 
-## Project setup
-```
-npm install
-```
+http://mu-vue-cart.surge.sh
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+ - This project use real api to communicate with backend server.
+ - Custom admin panel to manage product data. 
+ - Use Axios to make an api interpreter.  
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
