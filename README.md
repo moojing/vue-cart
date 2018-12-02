@@ -1,6 +1,4 @@
-# vue-cart
-
-## To see the result: 
+# To see the result: 
 
 http://mu-vue-cart.surge.sh
 
